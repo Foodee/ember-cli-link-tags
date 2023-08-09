@@ -3,7 +3,7 @@ import Mixin from "@ember/object/mixin";
 import documentHead from "ember-cli-link-tags/utils/document-head";
 
 import { get, set } from "@ember/object";
-import { run } from "@ember/runloop";
+import { next } from "@ember/runloop";
 import { isEmpty } from "@ember/utils";
 
 export default Mixin.create({
@@ -130,7 +130,7 @@ export default Mixin.create({
      */
     didTransition() {
       this._super(...arguments);
-      run.next(this, this.addLinksToHead);
+      next(this, this.addLinksToHead);
       return true;
     },
   },
