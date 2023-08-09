@@ -1,13 +1,12 @@
-import Mixin from '@ember/object/mixin';
+import Mixin from "@ember/object/mixin";
 
-import documentHead from 'ember-cli-link-tags/utils/document-head';
+import documentHead from "ember-cli-link-tags/utils/document-head";
 
-import { get, getWithDefault, set } from '@ember/object';
-import { run } from '@ember/runloop';
-import { isEmpty } from '@ember/utils';
+import { get, set } from "@ember/object";
+import { run } from "@ember/runloop";
+import { isEmpty } from "@ember/utils";
 
 export default Mixin.create({
-
   /*
    * Remove all link tags from the DOM
    * so we are presented with a clean
@@ -17,17 +16,17 @@ export default Mixin.create({
    * @method removeLinksFromHead
    */
   removeLinksFromHead() {
-    const linkSelectors = get(this, 'currentRouteLinkSelectors');
+    const linkSelectors = get(this, "currentRouteLinkSelectors");
 
     if (isEmpty(linkSelectors)) {
       return;
     }
 
-    const selectorString = linkSelectors.join(',');
+    const selectorString = linkSelectors.join(",");
 
     // Remove all the link tags from the head.
-    documentHead.querySelectorAll(selectorString).forEach(e => e.remove());
-    set(this, 'currentRouteLinkSelectors', null);
+    documentHead.querySelectorAll(selectorString).forEach((e) => e.remove());
+    set(this, "currentRouteLinkSelectors", null);
   },
 
   /*
@@ -50,8 +49,8 @@ export default Mixin.create({
       }
     }
 
-    linkElements.forEach(e => documentHead.appendChild(e));
-    this.set('currentRouteLinkSelectors', linkSelectors);
+    linkElements.forEach((e) => documentHead.appendChild(e));
+    this.set("currentRouteLinkSelectors", linkSelectors);
   },
 
   /*
@@ -73,9 +72,9 @@ export default Mixin.create({
    *   Link values.
    */
   _links() {
-    const links = getWithDefault(this, 'links', {});
+    const links = this.links ?? {};
 
-    if (typeof links === 'function') {
+    if (typeof links === "function") {
       return links.apply(this);
     }
 
@@ -100,16 +99,15 @@ export default Mixin.create({
    *   Link element.
    */
   _createLink(relationship, href) {
-    const link = window.document.createElement('link');
+    const link = window.document.createElement("link");
 
-    link.setAttribute('rel', relationship);
-    link.setAttribute('href', href);
+    link.setAttribute("rel", relationship);
+    link.setAttribute("href", href);
 
     return link;
   },
 
   actions: {
-
     /*
      * Trigger the route to remove link
      * tags from the DOM before a complete
@@ -134,6 +132,6 @@ export default Mixin.create({
       this._super(...arguments);
       run.next(this, this.addLinksToHead);
       return true;
-    }
-  }
+    },
+  },
 });
